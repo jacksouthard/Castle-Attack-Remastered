@@ -10,10 +10,21 @@ public class Block : MonoBehaviour {
 	public int currentHealth;
 	public string buildingMaterialName;
 
-	public void InitializeBlock(float left, int width, int height) {
-		float yPosition = TerrainGenerator.instance.GetLowestHeight (left, width);
-		float xPosition = Mathf.RoundToInt(left);
-		this.transform.position = new Vector3 (xPosition, yPosition, 0);
+	public void InitializeBlock(int width, int height) {
+		this.transform.localScale = new Vector3 (width, height, 1);
 		currentHealth = maxHealth;
+	}
+
+	public void TakeDamage(int damage) {
+		currentHealth -= damage;
+
+		if (currentHealth <= 0) {
+			Die ();
+		}
+	}
+
+	void Die() {
+		Debug.Log ("ahhhh");
+		GameObject.Destroy (this.gameObject);
 	}
 }
