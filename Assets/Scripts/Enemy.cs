@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour {
 	public float damage;
 	public float attackSpeed;
 	float attackTimer = 0f;
+	Block targetBlock;
 
 	Animator anim;
 
@@ -66,6 +67,7 @@ public class Enemy : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D coll) {
 		if (coll.tag == "Base") {
+			targetBlock = coll.gameObject.GetComponentInParent<Block> ();
 			StartAttack ();
 		}
 	}
@@ -75,6 +77,10 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Attack () {
+		if (targetBlock == null) {
+			EndAttack ();
+			return;
+		}
 		// assign damage
 		anim.SetTrigger("Attack");
 	}
