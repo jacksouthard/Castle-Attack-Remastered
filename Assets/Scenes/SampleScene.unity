@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66172d9c25cdf43c3bba843df86f7ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 100
-  mapResolution: 10
+  mapWidth: 10
+  mapResolution: 2
   terrainMesh: {fileID: 2093388394}
 --- !u!4 &1567541446
 Transform:

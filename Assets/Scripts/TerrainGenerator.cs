@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour {
+    public static TerrainGenerator instance;
+
     public int mapWidth;
     public int mapResolution;
 
     public MeshFilter terrainMesh;
 
-
     float[] heights;
 
-	private void Start() {
+    private void Awake() {
+        instance = this;
+
         GenerateTerrain();
 	}
 
@@ -53,5 +56,27 @@ public class TerrainGenerator : MonoBehaviour {
         mesh.uv = points2D;
 
         terrainMesh.mesh = mesh;
+    }
+
+    public PointData GetPointDataAtPos(float xPos) {
+        int leftIndex = Mathf.FloorToInt(xPos * mapResolution);
+        int rightIndex = Mathf.CeilToInt(xPos * mapResolution);
+        float p = (xPos * mapResolution - leftIndex);
+
+        float yPos = Mathf.Lerp(heights[leftIndex], heights[rightIndex], p);
+        Vector2 diff = new Vector2(1f / mapResolution, heights[rightIndex] - heights[leftIndex]);
+        float angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+
+        return new PointData(yPos, angle);
+    }
+
+    public struct PointData {
+        public float yPos;
+        public float angle;
+
+        public PointData(float _yPos, float _angle) {
+            yPos = _yPos;
+            angle = _angle;
+        }
     }
 }
