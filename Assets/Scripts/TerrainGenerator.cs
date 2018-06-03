@@ -30,12 +30,12 @@ public class TerrainGenerator : MonoBehaviour {
         UpdateVisual();
     }
 
-	/*private void Update() {
+	private void Update() {
         if (Input.GetMouseButtonDown(0)) {
             float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
             AddMassAtPos(xPos, 1f);
         }
-	}*/
+	}
 
 	void UpdateVisual() {
         int pointCount = heights.Length + 2;
@@ -66,15 +66,29 @@ public class TerrainGenerator : MonoBehaviour {
         terrainMesh.mesh = mesh;
     }
 
-    public int GetLowestHeight(float left, int width) {
-        int index = Mathf.RoundToInt(left);
+    //returns the lowest height among width points starting at left, or -1 if it is out of range
+    public int GetLowestHeight(int left, int width) {
         float curMinHeight = Mathf.Infinity;
 
         for (int i = 0; i < width; i++) {
-            curMinHeight = Mathf.Min(curMinHeight, heights[index + i]);
+            float newHeight = GetHeightAtIndex(left + i);
+            if (newHeight < 0) {
+                return -1;
+            }
+
+            curMinHeight = Mathf.Min(curMinHeight, newHeight);
         }
 
         return Mathf.FloorToInt(curMinHeight);
+    }
+
+    //returns height at index if position exists, otherwise -1
+    float GetHeightAtIndex(int index) {
+        if (index < 0 || index >= heights.Length) {
+            return -1;
+        }
+
+        return heights[index];
     }
 
     public PointData GetPointDataAtPos(float xPos) {
@@ -89,30 +103,48 @@ public class TerrainGenerator : MonoBehaviour {
         return new PointData(yPos, angle);
     }
 
-    /*public void AddMassAtPos(float xPos, float mass) {
-        int index = Mathf.RoundToInt(xPos * mapResolution);
+    public void AddMassAtPos(float xPos, float mass) {
+        int index = Mathf.RoundToInt(xPos);
         AddMassAtIndex(index, mass);
-        
+
         UpdateVisual();
     }
 
-    bool AddMassAtIndex(int index, float mass) {
-        if(index 
+    void AddMassAtIndex(int index, float mass, int dir = 0) {
+        if (index < 0 || index >= heights.Length) {
+            return;
+        }
 
-        float curHeight = heights[index];
+        float possibleHeight = heights[index] + mass;
         float remaininingMass = mass;
 
-        float maxDiff = Mathf.Max(Mathf.Abs(curHeight - heights[index - 1]), Mathf.Abs(curHeight - heights[index + 1]));
-        if (maxDiff < maxHeightDiff) {
-            heights[index] += mass;
-            return 0f;
-        } else {
-            remaininingMass -= maxHeightDiff;
-            AddMassAtIndex(index-1,remaininingMass/2);
-            AddMassAtIndex(index+1,remaininingMass/2);
-            return 0f;
+        float leftHeight = (dir < 1) ? GetHeightAtIndex(index - 1) : -1;
+        float rightHeight = (dir > -1) ? GetHeightAtIndex(index + 1) : -1;
+
+        float leftDiff = (leftHeight >= 0) ? Mathf.Abs(possibleHeight - leftHeight) : -1;
+        float rightDiff = (rightHeight >= 0) ? Mathf.Abs(possibleHeight - rightHeight) : -1;
+        float maxDiff = Mathf.Max(leftDiff, rightDiff);
+
+        float massUsed = (maxDiff <= maxHeightDiff) ? mass : maxDiff - maxHeightDiff;
+
+        if (remaininingMass <= massUsed) {
+            remaininingMass -= massUsed;
+            heights[index] += massUsed;
         }
-    }*/
+
+        if (remaininingMass <= 0) {
+            return;
+        }
+
+        if (leftDiff > 0 && rightDiff > 0) {
+            AddMassAtIndex(index - 1, remaininingMass / 2f, -1);
+            AddMassAtIndex(index + 1, remaininingMass / 2f, 1);
+        } else if (leftDiff > 0) {
+            AddMassAtIndex(index - 1, remaininingMass, -1);
+        } else {
+            AddMassAtIndex(index + 1, remaininingMass, 1);
+        }
+    }
 
     public struct PointData {
         public float yPos;
