@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 58191973852846502}
   - component: {fileID: 58207466400137444}
   - component: {fileID: 95142566696627158}
+  - component: {fileID: 50624882170585400}
   m_Layer: 0
   m_Name: Alien0
   m_TagString: Untagged
@@ -249,6 +250,26 @@ Transform:
   m_Father: {fileID: 4840014452174436}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50624882170585400
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1182104503955814}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!58 &58191973852846502
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -276,9 +297,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.24, y: 0.27}
+  m_Offset: {x: -0.12, y: 0.27}
   serializedVersion: 2
-  m_Radius: 0.34
+  m_Radius: 0.26
 --- !u!95 &95142566696627158
 Animator:
   serializedVersion: 3
@@ -307,10 +328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1010888183e482497f619a76ce49e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  health: 20
   movementSpeed: 0.3
-  damage: 0
-  attackSpeed: 0
+  damage: 5
+  attackSpeed: 1
 --- !u!212 &212185577795116386
 SpriteRenderer:
   m_ObjectHideFlags: 1

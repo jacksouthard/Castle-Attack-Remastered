@@ -10,14 +10,14 @@ public class Enemy : MonoBehaviour {
 	};
 	State state = State.moving;
 
-	public float health;
+	public int health;
 	public float movementSpeed;
 
 	float slopeModifier = 0.05f; // ratio multiplied to speed based on how close the enemies rotation is to 90
 	float xPos;
 	float steepness = 0f;
 
-	public float damage;
+	public int damage;
 	public float attackSpeed;
 	float attackTimer = 0f;
 	Block targetBlock;
@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void TakeDamage (float damage) {
+	public void TakeDamage (int damage) {
 		health -= damage;
 		if (health <= 0f) {
 			Die ();
@@ -83,6 +83,7 @@ public class Enemy : MonoBehaviour {
 		}
 		// assign damage
 		anim.SetTrigger("Attack");
+		targetBlock.TakeDamage (damage);
 	}
 
 	void EndAttack () {
