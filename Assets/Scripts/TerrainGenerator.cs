@@ -131,7 +131,7 @@ public class TerrainGenerator : MonoBehaviour {
         float rightDiff = (rightHeight >= 0) ? Mathf.Abs(possibleHeight - rightHeight) : -1;
         float maxDiff = Mathf.Max(leftDiff, rightDiff);
 
-        float massUsed = (maxDiff <= maxHeightDiff) ? mass : maxDiff - maxHeightDiff;
+        float massUsed = (maxDiff < maxHeightDiff) ? mass : maxDiff - maxHeightDiff;
 
         if (remaininingMass <= massUsed) {
             remaininingMass -= massUsed;
