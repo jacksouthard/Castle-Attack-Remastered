@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockManager : MonoBehaviour {
+	public static BlockManager instance;
+
 	public GameObject blockPrefab;
+	public float lerpSpeed;
 
 	int widthOfPendingBlock = 1;
 	int heightOfPendingBlock = 2;
 
-	// Use this for initialization
-	void Start () {
-		CreateBlock (10f);
-		CreateBlock (11f);
-
-		widthOfPendingBlock = 3;
-		CreateBlock (10f);
+	void Awake() {
+		instance = this;
 	}
 
 	public void CreateBlock(float left) {
@@ -37,6 +35,7 @@ public class BlockManager : MonoBehaviour {
 			}
 		}
 
+		float xPosition = Mathf.RoundToInt(left) + (widthOfPendingBlock / 2f);
 		float yPosition;
 		if (highestY != 0) {
 			yPosition = highestY;
@@ -45,12 +44,29 @@ public class BlockManager : MonoBehaviour {
 			// no blocks below placed block
 			yPosition = TerrainGenerator.instance.GetLowestHeight (left + 0.5f, widthOfPendingBlock + 1);
 		}
-			
-		GameObject newBlockGO = Instantiate (blockPrefab, new Vector3 (left + (widthOfPendingBlock / 2f), yPosition + (heightOfPendingBlock / 2f), 0), Quaternion.identity, this.transform);
+
+		Vector3 startPosition = new Vector3 (xPosition + (widthOfPendingBlock * .5f), 50f, 0);
+		Vector3 endPosition = new Vector3 (xPosition + (widthOfPendingBlock * .5f), yPosition + (heightOfPendingBlock * .5f), 0);
+
+		GameObject newBlockGO = Instantiate (blockPrefab, startPosition, Quaternion.identity, this.transform);
 		Block newBlock = newBlockGO.GetComponent<Block> ();
 		newBlock.InitializeBlock (widthOfPendingBlock, heightOfPendingBlock, blocksUnderNewBlock.Count);
 		foreach (var block in blocksUnderNewBlock) {
 			block.supportingBlocks.Add (newBlock);
+		}
+
+		StartCoroutine(LerpIt(newBlockGO.transform, startPosition, endPosition));
+	}
+
+	IEnumerator LerpIt(Transform t, Vector3 startPosition, Vector3 endPosition) {
+		float startTime = Time.time;
+		float journeyLength = Vector3.Distance(startPosition, endPosition);
+
+		while (true) {
+			yield return new WaitForEndOfFrame ();
+			float distCovered = (Time.time - startTime) * lerpSpeed;
+			float fracJourney = distCovered / journeyLength;
+			t.position = Vector3.Lerp (startPosition, endPosition, fracJourney);
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class ClickManager : MonoBehaviour {
 
 			float yPos = Camera.main.ScreenToWorldPoint (Input.mousePosition).y;
 
-			BlockManager.instance.CreateBlock (xPos, yPos);
+			BlockManager.instance.CreateBlock (xPos);
         }
 	}
 }
