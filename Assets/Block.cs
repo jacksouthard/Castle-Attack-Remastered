@@ -37,6 +37,7 @@ public class Block : MonoBehaviour {
 
 	void Fall () {
 		print ("Fall");
+		Die ();
 	}
 
 	void Die() {

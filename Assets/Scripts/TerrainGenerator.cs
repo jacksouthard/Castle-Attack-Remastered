@@ -67,11 +67,12 @@ public class TerrainGenerator : MonoBehaviour {
     }
 
     //returns the lowest height among width points starting at left, or -1 if it is out of range
-    public int GetLowestHeight(int left, int width) {
+    public int GetLowestHeight(float left, int width) {
+		int index = Mathf.RoundToInt (left);
         float curMinHeight = Mathf.Infinity;
 
         for (int i = 0; i < width; i++) {
-            float newHeight = GetHeightAtIndex(left + i);
+			float newHeight = GetHeightAtIndex(index + i);
             if (newHeight < 0) {
                 return -1;
             }

@@ -45,10 +45,8 @@ public class BlockManager : MonoBehaviour {
 			// no blocks below placed block
 			yPosition = TerrainGenerator.instance.GetLowestHeight (left + 0.5f, widthOfPendingBlock + 1);
 		}
-
-		float xPosition = Mathf.RoundToInt (left); // left should already be rounded;
-
-		GameObject newBlockGO = Instantiate (blockPrefab, new Vector3 (xPosition + (widthOfPendingBlock / 2f), yPosition + (heightOfPendingBlock / 2f), 0), Quaternion.identity, this.transform);
+			
+		GameObject newBlockGO = Instantiate (blockPrefab, new Vector3 (left + (widthOfPendingBlock / 2f), yPosition + (heightOfPendingBlock / 2f), 0), Quaternion.identity, this.transform);
 		Block newBlock = newBlockGO.GetComponent<Block> ();
 		newBlock.InitializeBlock (widthOfPendingBlock, heightOfPendingBlock, blocksUnderNewBlock.Count);
 		foreach (var block in blocksUnderNewBlock) {
