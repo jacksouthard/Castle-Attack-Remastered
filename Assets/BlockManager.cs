@@ -62,11 +62,17 @@ public class BlockManager : MonoBehaviour {
 		float startTime = Time.time;
 		float journeyLength = Vector3.Distance(startPosition, endPosition);
 
-		while (true) {
+        while (true) {
 			yield return new WaitForEndOfFrame ();
 			float distCovered = (Time.time - startTime) * lerpSpeed;
 			float fracJourney = distCovered / journeyLength;
 			t.position = Vector3.Lerp (startPosition, endPosition, fracJourney);
+
+            if (fracJourney >= 0.99f) {
+                break;
+            }
 		}
+
+        t.position = endPosition;
 	}
 }

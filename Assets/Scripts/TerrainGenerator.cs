@@ -31,9 +31,9 @@ public class TerrainGenerator : MonoBehaviour {
     }
 
 	private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButton(1)) {
             float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
-            AddMassAtPos(xPos, 1f);
+            AddMassAtPos(xPos, 0.25f);
         }
 	}
 
