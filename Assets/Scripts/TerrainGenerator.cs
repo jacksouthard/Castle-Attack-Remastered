@@ -31,9 +31,14 @@ public class TerrainGenerator : MonoBehaviour {
     }
 
 	private void Update() {
+        if (Input.GetMouseButton(0)) {
+            float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
+            AddMassAtPos(xPos, 0.25f, true);
+        }
+
         if (Input.GetMouseButton(1)) {
             float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
-            AddMassAtPos(xPos, 0.25f);
+            AddMassAtPos(xPos, 0.25f, false);
         }
 	}
 
@@ -104,19 +109,19 @@ public class TerrainGenerator : MonoBehaviour {
         return new PointData(yPos, angle);
     }
 
-    public void AddMassAtPos(float xPos, float mass) {
+    public void AddMassAtPos(float xPos, float mass, bool adding) {
         int index = Mathf.RoundToInt(xPos);
-        AddMassAtIndex(index, mass);
+        AddMassAtIndex(index, mass, adding);
 
         UpdateVisual();
     }
 
-    void AddMassAtIndex(int index, float mass, int dir = 0) {
+    void AddMassAtIndex(int index, float mass, bool adding, int dir = 0) {
         if (index < 0 || index >= heights.Length) {
             return;
         }
 
-        float possibleHeight = heights[index] + mass;
+        float possibleHeight = (adding) ? heights[index] + mass : heights[index] - mass;
         float remaininingMass = mass;
 
         float leftHeight = (dir < 1) ? GetHeightAtIndex(index - 1) : -1;
@@ -130,7 +135,11 @@ public class TerrainGenerator : MonoBehaviour {
 
         if (remaininingMass <= massUsed) {
             remaininingMass -= massUsed;
-            heights[index] += massUsed;
+            if (adding) {
+                heights[index] += massUsed;
+            } else {
+                heights[index] -= massUsed;
+            }
         }
 
         if (remaininingMass <= 0) {
@@ -138,12 +147,12 @@ public class TerrainGenerator : MonoBehaviour {
         }
 
         if (leftDiff > 0 && rightDiff > 0) {
-            AddMassAtIndex(index - 1, remaininingMass / 2f, -1);
-            AddMassAtIndex(index + 1, remaininingMass / 2f, 1);
+            AddMassAtIndex(index - 1, remaininingMass / 2f, adding, -1);
+            AddMassAtIndex(index + 1, remaininingMass / 2f, adding, 1);
         } else if (leftDiff > 0) {
-            AddMassAtIndex(index - 1, remaininingMass, -1);
+            AddMassAtIndex(index - 1, remaininingMass, adding, -1);
         } else {
-            AddMassAtIndex(index + 1, remaininingMass, 1);
+            AddMassAtIndex(index + 1, remaininingMass, adding, 1);
         }
     }
 

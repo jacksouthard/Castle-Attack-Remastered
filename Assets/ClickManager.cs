@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClickManager : MonoBehaviour {
 	private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0) && false) {
             float xPos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
 
 			if (xPos > TerrainGenerator.instance.mapWidth) {
