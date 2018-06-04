@@ -10,9 +10,13 @@ public class Block : MonoBehaviour {
 	public int currentHealth;
 	public string buildingMaterialName;
 
-	public void InitializeBlock(int width, int height) {
+	public List<Block> supportingBlocks; // the blocks that would fall if this block is destroyed
+	public int numberOfBlocksSupportingThisBlock;
+
+	public void InitializeBlock(int width, int height, int _numberOfBlocksSupportingThisBlock) {
 		this.transform.localScale = new Vector3 (width, height, 1);
 		currentHealth = maxHealth;
+		numberOfBlocksSupportingThisBlock = _numberOfBlocksSupportingThisBlock;
 	}
 
 	public void TakeDamage(int damage) {
@@ -23,8 +27,22 @@ public class Block : MonoBehaviour {
 		}
 	}
 
+	public void SupportingBlockRemoved () {
+		print ("Supporting block removed");
+		numberOfBlocksSupportingThisBlock--;
+		if (numberOfBlocksSupportingThisBlock <= 0) {
+			Fall ();
+		}
+	}
+
+	void Fall () {
+		print ("Fall");
+	}
+
 	void Die() {
-		Debug.Log ("ahhhh");
+		foreach (var supportingBlock in supportingBlocks) {
+			supportingBlock.SupportingBlockRemoved ();
+		}
 		GameObject.Destroy (this.gameObject);
 	}
 }

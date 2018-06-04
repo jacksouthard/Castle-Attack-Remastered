@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114598928286639780}
   - component: {fileID: 61681098495830080}
   m_Layer: 0
-  m_Name: WoodBlock
+  m_Name: Block
   m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
